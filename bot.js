@@ -30,22 +30,22 @@ client.on('messageCreate', async (msg) => {
 
   // commands
   if (msg.content.startsWith(prefix)) {
-    const args  = msg.content.slice(prefix.length).split(/ +/)
+    const args = msg.content.slice(prefix.length).split(/ +/)
     const command = args.shift().toLowerCase()
 
     // woof command
     if (command === 'woof') {
-      msg.channel.send("Woof Woof!")
+      msg.channel.send('Woof Woof!')
     }
 
     // yn command
-    if (command === "yn") {
+    if (command === 'yn') {
       const answer = ['Yes!', 'No!'][Math.floor(Math.random() * 2)]
       msg.reply(answer)
     }
 
     // choose command
-    if (command === "choose") {
+    if (command === 'choose') {
       if (args.length === 0) return
       const choices = args.join(' ').split(',')
       const answer = choices[Math.floor(Math.random() * choices.length)]
@@ -62,12 +62,74 @@ client.on('messageCreate', async (msg) => {
     }
 
     // settime WIP
-    // if (command === 'settime') {
-
-    // }
+    if (command === 'settime') {
+      if (args.length === 0) {
+        msg.channel.send({
+          embeds: [
+            {
+              title: "!settime",
+              color: 10038562,
+              fields: [
+                { name: 'Format', value: `!settime # {minutes/hours/days}, {gamename}, {people}` },
+                { name: 'Example', value: `!settime 5 hours, Fornite, @jack @diane` }
+              ],
+            },
+          ],
+        })
+      }
+      const information = args.join(' ').split(',')
+      if (information.length != 3) return
+      const time = information[0].split(' ')
+      if (time.length != 2 || !Number(time[0])) return
+      const unit = time[1]
+      const current = new Date()
+      let newTime
+      if (
+        unit === 'second' ||
+        unit === 'seconds' ||
+        unit === 'sec' ||
+        unit === 'secs' ||
+        unit === 's'
+      ) {
+        msg.reply('bruh')
+        return
+      }
+      if (
+        unit === 'minute' ||
+        unit === 'minutes' ||
+        unit === 'min' ||
+        unit === 'mins' ||
+        unit === 'm'
+      ) {
+        newTime = current.getTime() + time[0] * 60000
+      }
+      if (
+        unit === 'hour' ||
+        unit === 'hours' ||
+        unit === 'hr' ||
+        unit === 'hrs' ||
+        unit === 'h'
+      ) {
+        newTime = current.getTime() + time[0] * 3600000
+      }
+      if (unit === 'day' || unit === 'days' || unit === 'd') {
+        newTime = current.getTime() + time[0] * 86400000
+      }
+      // msg.channel.send(`Time: <t:${Math.floor(newTime / 1000)}:f>, Game: ${information[1]}, People: ${information[2]}`)
+      msg.channel.send({
+        embeds: [
+          {
+            color: 5763719,
+            fields: [
+              { name: 'Time', value: `<t:${Math.floor(newTime / 1000)}:f>` },
+              { name: 'Game', value: information[1] },
+              { name: 'People', value: information[2] },
+            ],
+          },
+        ],
+      })
+    }
   }
-
-
 })
 
 client.login(config.token)
