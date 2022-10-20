@@ -76,11 +76,40 @@ client.on('messageCreate', async (msg) => {
             },
           ],
         })
+        return
       }
       const information = args.join(' ').split(',')
-      if (information.length != 3) return
+      if (information.length != 3) {
+        msg.channel.send({
+          embeds: [
+            {
+              title: "Error:",
+              color: 10038562,
+              description: "All arguments (time/game/people) must be filled.",
+              fields: [
+                { name: 'Example', value: `!settime 5 hours, Fornite, @jack @diane` }
+              ],
+            },
+          ],
+        })
+        return
+      }
       const time = information[0].split(' ')
-      if (time.length != 2 || !Number(time[0])) return
+      if (time.length != 2 || !Number(time[0])) {
+        msg.channel.send({
+          embeds: [
+            {
+              title: "Error:",
+              color: 10038562,
+              description: "Time must be filled correctly.",
+              fields: [
+                { name: 'Example', value: `!settime 5 hours, Fornite, @jack @diane` }
+              ],
+            },
+          ],
+        })
+        return
+      }
       const unit = time[1]
       const current = new Date()
       let newTime
@@ -115,7 +144,6 @@ client.on('messageCreate', async (msg) => {
       if (unit === 'day' || unit === 'days' || unit === 'd') {
         newTime = current.getTime() + time[0] * 86400000
       }
-      // msg.channel.send(`Time: <t:${Math.floor(newTime / 1000)}:f>, Game: ${information[1]}, People: ${information[2]}`)
       msg.channel.send({
         embeds: [
           {
