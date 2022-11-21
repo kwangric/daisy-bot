@@ -28,6 +28,11 @@ client.on('messageCreate', async (msg) => {
     msg.channel.send('Woof!')
   }
 
+  // mmow
+  if (msg.content.toLowerCase().includes('mmow')) {
+    msg.react('<:mmow:1029476169575301182>')
+  }
+
   // commands
   if (msg.content.startsWith(prefix)) {
     const args = msg.content.slice(prefix.length).split(/ +/)
